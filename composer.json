@@ -1,0 +1,22 @@
+{
+    "name": "flair/chat",
+    "description": "Realtime chat app",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "Flair\\Chat\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nicholas Babu",
+            "email": "nijoba33@gmail.com"
+        }
+    ],
+    "require": {
+        "pusher/pusher-php-server": "^7.0"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.20"
+    }
+}

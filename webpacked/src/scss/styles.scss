@@ -1,0 +1,369 @@
+@import "controls";
+
+#chat-block-main.children-hidden {
+  height: auto;
+  width: auto;
+  position: fixed; // relative #
+  bottom: 1vh;
+  right: 0;
+  padding: 25px 30px;
+}
+
+#chat-block-main {
+  position: fixed; // relative #
+  bottom: 1vh;
+  right: 0;
+  padding: 25px 30px;
+  width: 1396px;
+  max-width: 100%;
+  height: calc(100vh - 50px);
+  display: grid;
+  gap: 0.6rem;
+  background-color: #ddd;
+
+
+  .chat-block {
+    // user-list and messages-view div
+    z-index: inherit;
+    position: relative;
+    //background: #0a6fb4;
+    height: 100%;
+    display: grid;
+    gap: 1.5rem;
+    // user-image height width === 50px
+    // @TODO set no-show to show on desktop for the block
+    // and switching from users lists and message list
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    place-items: center;
+    overflow: auto;
+
+    .messages-view {
+
+    }
+
+    .users-wrapper {
+      height: calc(100% - 60px); // 60 header height
+      width: 100%;
+    }
+  }
+
+
+  // rIGHT
+  .messages-view {
+    z-index: inherit;
+    position: relative;
+    overflow: auto;
+    width: 100%;
+    background: #e5ddd5;
+    height: calc(100% - 60px); // 60 header height
+
+    //::before {
+    //  content: '';
+    //  position: absolute;
+    //  top: 0;
+    //  left: 0;
+    //  width: 100%;
+    //  height: 100%;
+    //  //background: url(files/message_list_bg.png);
+    //  // background: url(../files/back_arrow.png);
+    //  opacity: 0.06;
+    //}
+  }
+
+  //.no-message {
+  //  height: calc(100% - 80px); // 60 header height + 80
+  //}
+
+  .message-list {
+    z-index: inherit;
+    position: relative;
+    width: 100%;
+    //background: yellow;
+    height: calc(100% - 140px); // 60+80 header height and input height
+    padding: 50px;
+    overflow-y: auto;
+    cursor: pointer;
+  }
+
+  .message {
+    position: relative;
+    display: flex;
+    // width: 100%;
+    margin: 5px 0;
+
+    p {
+      position: relative;
+
+      word-wrap: break-word;
+      right: 0;
+      text-align: right;
+      max-width: 65%;
+      padding: 12px;
+      background: #dcf8c6;
+      border-radius: 10px;
+      font-size: 0.9em;
+    }
+    .warning {
+      background: #f3cece;
+      padding: 1em;
+    }
+
+    ::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -12px;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #dcf8c6 0%, #dcf8c6 50%, transparent 50%, transparent);
+    }
+  }
+  // @TODO uncomment
+  //p {
+  //  span {
+  //    display: block;
+  //    margin-top: 5px;
+  //    font-size: 0.85em;
+  //    opacity: 0.5;
+  //  }
+  //}
+
+  // message p span
+  p {
+    span {
+      display: block;
+      margin-top: 5px;
+      font-size: 0.85em;
+      opacity: 0.5;
+    }
+  }
+
+  .sent {
+    justify-content: flex-end;
+  }
+  .received {
+    justify-content: flex-start;
+
+    p {
+      background: #fff;
+      text-align: left;
+    }
+
+    ::before {
+      position: absolute;
+      top: 0;
+      left: -12px;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(225deg, #fff 0%, #fff 50%, transparent 50%, transparent);
+    }
+  }
+
+  .chat-input {
+    width: 100%;
+    height: 80px;
+    background: #f0f0f0;
+    padding: 15px;
+    /**
+    Include media inputs and such.
+     */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  input {
+    width: 90%;
+    background: #f0f0f0;
+    padding: 10px 20px;
+    margin: auto 20px;
+    border-radius: 30px;
+    font-size: 1em;
+  }
+
+  .header {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    background: #ededed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+  }
+
+  .user-image {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .user-nav {
+    display: flex;
+
+    li {
+      cursor: pointer;
+      margin-left: 20px;
+    }
+  }
+
+  // lEFT
+  .users-wrapper {
+    position: relative;
+    overflow: auto;
+    //flex: 30%;
+    background: #fff;
+    border-right: 1px solid #000;
+    //.user,
+    //a {
+    //  display: flex;
+    //  align-items: center;
+    //  justify-content: space-between;
+    //  padding-bottom: 20px;
+    //  border-bottom: 1px solid #e6e6e6;
+    //  cursor: pointer;
+    //}
+  }
+
+  // Inside .users-wrapper
+  .users-list {
+    position: relative;
+    height: calc(100% - 60px); /* header height === 60 */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .user {
+      cursor: pointer;
+    }
+  }
+
+  .active {
+    .user-content {
+      background: #f1f1f1;
+    }
+  }
+
+  .user-content {
+    position: relative;
+    margin: .3em;
+    display: grid;
+    grid-template-columns: 20% 45% 15%;
+    //grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    align-items: center;
+    gap: .25em;
+    width: 100%;
+    padding: .3em;
+    background: #e5e3e3;
+    border-bottom: 1px solid rgba(0,0,0,0.6);
+
+    .details {
+      // background: red;
+      //position: relative;
+      //width: 100%;
+      //display: flex;
+      //justify-content: space-between;
+      // align-items: center;
+    }
+
+    .user-image {
+      background: #8dea8d;
+    }
+
+    .last-msg {
+      color: #aaa;
+      font-size: .9em;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 70%;
+      text-overflow: ellipsis;
+    }
+
+    .unread {
+      //background: yellow;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+
+      .time {
+        font-size: .75em;
+        color: #aaa;
+        padding: 0.5em;
+      }
+    }
+
+    // @TODO will show latest message
+    //p {
+    //  width: inherit;
+    //  color: #e80202;
+    //  font-size: 0.9em;
+    //  white-space: nowrap;
+    //  overflow: hidden;
+    //  text-overflow: ellipsis;
+    //}
+
+    .display-name {
+      letter-spacing: 0.02em;
+      font-size: 1rem;
+    }
+  }
+
+  .pending,
+  .info {
+    //background: #063406;
+    position: relative;
+    font-size: 1.3em;
+    color: #4bef4b;
+
+    .unread-count,
+    .total {
+      position: absolute;
+      font-size: .55em;
+      font-weight: 700;
+      color: #eeeded;
+      left:50%;
+      top:50%;
+      transform: translate(-50%, -50%)
+    }
+  }
+}
+
+@media (min-width: 560px ) {
+
+  #chat-block-main {
+
+    // No need to display the go back icon on bigger screens.
+    // As both usersView and messagesView are visible.
+    .chat-controls {
+      .go-back {
+        display: none;
+      }
+    }
+    .chat-block {
+      grid-template-columns: 30% 1fr;
+
+      // For .messages-view should show on bigger screens.
+      .messages-view,
+      .users-wrapper,
+      .no-show {
+        display: grid;
+      }
+    }
+
+    // message list fits
+    .messages-list {
+      //height: calc(100% - 140px); // 60+80 header height and input height
+      //height: auto; // 60+80 header height and input height
+    }
+  }
+}
