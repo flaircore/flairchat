@@ -25,16 +25,16 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Flair\Chat\AppVars;
 use Flair\Chat\PusherClient;
 
-class Flair_Chat {
+class Flair_Chat
+{
 
     const NONCE_ACTION = 'wp_rest';
 
-    private $plugin;
+    private string $plugin;
 
-    /** @var \Pusher\Pusher */
-    protected $pusher;
+    protected \Pusher\Pusher $pusher;
 
-	protected $pusher_details;
+    protected $pusher_details;
 
     public function __construct()
     {
@@ -42,11 +42,11 @@ class Flair_Chat {
         add_action('wp_footer', array($this, 'attach_chat_block'));
 
         // On install or update
-        register_activation_hook(__FILE__,  array($this, 'create_db_tables'));
+        register_activation_hook(__FILE__, array($this, 'create_db_tables'));
 
         register_deactivation_hook(__FILE__, array($this, 'flair_chat_cleanup'));
 
-	    require_once plugin_dir_path(__FILE__) . 'templates/admin.php';
+        require_once plugin_dir_path(__FILE__) . 'templates/admin.php';
 
 
         // Add shortcode
@@ -58,26 +58,24 @@ class Flair_Chat {
 
         add_action('rest_api_init', array($this, 'register_routes_api'));
 
-		$this->flair_chat_setup();
+        $this->flair_chat_setup();
     }
 
-	public function flair_chat_setup()
-	{
-		$pusher_details = new AppVars();
-		$pusher_details = $pusher_details->get_pusher_details();
+    public function flair_chat_setup()
+    {
+        $pusher_details = new AppVars();
+        $pusher_details = $pusher_details->getPusherDetails();
 
-		$pusher = new PusherClient();
-		$this->pusher = $pusher->pusherInstance($pusher_details);
-		$this->pusher_details = $pusher_details;
-
-	}
+        $pusher = new PusherClient();
+        $this->pusher = $pusher->pusherInstance($pusher_details);
+        $this->pusher_details = $pusher_details;
+    }
 
     public function settings_links($links)
     {
         $settings_link = '<a href="admin.php?page=flair-chat-settings-page">Configuration</a>';
-        array_push($links, $settings_link);
+        $links[]       = $settings_link;
         return $links;
-
     }
 
 //    public function add_admin_pages()
@@ -97,16 +95,18 @@ class Flair_Chat {
 //        require_once plugin_dir_path(__FILE__) . 'templates/admin.php';
 //    }
 
-    public function attach_chat_block()
+    public function attach_chat_block(): void
     {
 
-	    $current_uid = get_current_user_id();
+        $current_uid = get_current_user_id();
 
-		// $TODO for guests
-		// Nothing for guest users for now.
-		if (!$current_uid) return;
+        // $TODO for guests
+        // Nothing for guest users for now.
+        if (!$current_uid) {
+            return;
+        }
 
-		$js_src = plugin_dir_url(__FILE__) .'/dist/chat_nv.bundle.js';
+        $js_src = plugin_dir_url(__FILE__) .'/dist/chat_nv.bundle.js';
         $new_msg_url = get_rest_url(null, 'api/v1/flair-chat/send-message');
         $messages_url = get_rest_url(null, 'api/v1/flair-chat/messages/');
         $nonce = wp_create_nonce(self::NONCE_ACTION);
@@ -115,7 +115,8 @@ class Flair_Chat {
 
         $styles_src = plugin_dir_url(__FILE__) .'/dist/chat_nv.css';
 
-        wp_enqueue_script('flair-chat',
+        wp_enqueue_script(
+            'flair-chat',
             $js_src,
             array(),
             1,
@@ -135,13 +136,13 @@ class Flair_Chat {
         );
 
 
-        wp_add_inline_script( 'flair-chat', 'var flairChatData = ' . wp_json_encode( $flair_chat_items), 'before' );
+        wp_add_inline_script('flair-chat', 'var flairChatData = ' . wp_json_encode($flair_chat_items), 'before');
         wp_add_inline_style('flair-chat', $styles_src);
 
-        echo $this->chat_block_template($current_uid );
+        echo $this->chat_block_template($current_uid);
     }
 
-    public function create_db_tables()
+    public function create_db_tables(): void
     {
         global $wpdb;
         $messages_table = $wpdb->prefix . "flair_chat_messages";
@@ -161,23 +162,24 @@ class Flair_Chat {
         dbDelta($msg_sql);
     }
 
-    public function chat_block_template($current_uid )
+    public function chat_block_template($current_uid): string
     {
         $args = array(
-			// @TODO for roles from get_option() settings
-			//'role__not_in' => 'administrator',
-			'exclude'  => array('id' => $current_uid),
-	        );
+            // @TODO for roles from get_option() settings
+            //'role__not_in' => 'administrator',
+            'exclude'  => array('id' => $current_uid),
+            );
         global $wpdb;
-	    // Unread messages
-	    $table = $wpdb->prefix . "flair_chat_messages";
-	    $user_query = new WP_User_Query($args);
+        // Unread messages
+        $table = $wpdb->prefix . "flair_chat_messages";
+        $user_query = new WP_User_Query($args);
         $div_weight = 4;
         $total_unread = [
             'total' => 0
         ];
 
-        $missing_image_uri = plugin_dir_url(__FILE__) .'/images/missing_image.svg';;
+        $missing_image_uri = plugin_dir_url(__FILE__) .'/images/missing_image.svg';
+        ;
         $users_list = "";
 
         //$faker = new \Flair\Chat\Faker\MessageFactory();
@@ -185,15 +187,15 @@ class Flair_Chat {
         $users = $user_query->get_results();
 
         $user_ids = [];
-        if ( ! empty( $users ) ) {
+        if (! empty($users)) {
             /** @var WP_User $user */
-            foreach ( $users as $user ) {
+            foreach ($users as $user) {
                 $user_ids[] = $user->ID;
             }
         }
 
 
-        $user_ids = implode(',', $user_ids );
+        $user_ids = implode(',', $user_ids);
         $unread_messages = $wpdb->get_results("
                   SELECT
                       message, from_uid, to_uid, is_read,
@@ -210,7 +212,7 @@ class Flair_Chat {
 
 
         if ($unread_messages) {
-            foreach ($unread_messages as $unread_message ) {
+            foreach ($unread_messages as $unread_message) {
                 $unread_array = (array)$unread_message;
                 //dump($unread_array);
                 $total_unread[] = [
@@ -219,15 +221,14 @@ class Flair_Chat {
                 ];
 
                 $total_unread['total'] = $total_unread['total'] + $unread_array['COUNT(message)'];
-
             }
         }
 
 
         // Template
-        if ( ! empty( $users ) ) {
+        if (! empty($users)) {
             /** @var WP_User $user */
-            foreach ( $users as $user ) {
+            foreach ($users as $user) {
                 $user_div_data = "
                     <div class='user' id='$user->ID'>
                         <div class='user-content'>
@@ -258,11 +259,9 @@ class Flair_Chat {
                 } else {
                     $users_list = $user_div_data;
                 }
-
             }
         } else {
             $users_list .= 'No users found.';
-
         }
 
         // Chat controls.
@@ -278,7 +277,8 @@ class Flair_Chat {
                                <div class='icon maximize' title='Maximize chat view.'>                           
                                </div> 
                                
-                               <div class='icon minimize no-show' title='Minimize chat view.'>                           
+                               <div class='icon minimize no-show' 
+                               		title='Minimize chat view.'>                           
                                </div> 
                             </section>
                      </div>";
@@ -343,47 +343,48 @@ class Flair_Chat {
         return $content;
     }
 
-    private function unread_total_count(&$total_unread, $user_id) {
+    private function unread_total_count(&$total_unread, $user_id)
+    {
 
         $value = array_filter($total_unread, function ($item) use ($user_id) {
            //dump($item['total']);
 
             if (isset($item['from_uid']) && $item['from_uid'] === $user_id) {
-
                 return $item;
             } else {
                 return [];
             }
         });
 
-        if (!array_values($value)) return '0';
+        if (!array_values($value)) {
+            return '0';
+        }
 
         return array_values($value)[0]['total'];
     }
 
-    public function register_routes_api()
+    public function register_routes_api(): void
     {
-        register_rest_route( 'api/v1', 'flair-chat/messages/(?P<id>[a-zA-Z0-9-]+)', array(
+        register_rest_route('api/v1', 'flair-chat/messages/(?P<id>[a-zA-Z0-9-]+)', array(
                 'methods' => 'GET',
                 'callback' => array($this, 'get_messages')
         ));
 
-        register_rest_route( 'api/v1', 'flair-chat/send-message', array(
+        register_rest_route('api/v1', 'flair-chat/send-message', array(
             'methods' => 'POST',
             'callback' => array($this, 'send_message')
         ));
     }
 
-    public function send_message(WP_REST_Request $req)
+    public function send_message(WP_REST_Request $req): WP_REST_Response
     {
         global $wpdb;
         $headers = $req->get_headers();
         $params = $req->get_params();
         $nonce = $headers['x_wp_nonce'][0];
 
-        if (!wp_verify_nonce($nonce, self::NONCE_ACTION))
-        {
-           return new WP_REST_Response('Message not sent', 422);
+        if (!wp_verify_nonce($nonce, self::NONCE_ACTION)) {
+            return new WP_REST_Response('Message not sent', 422);
         }
 
         $from_uid = get_current_user_id();
@@ -411,7 +412,7 @@ class Flair_Chat {
 
         return  new WP_REST_Response($data);
     }
-    public function get_messages(WP_REST_Request $req)
+    public function get_messages(WP_REST_Request $req): WP_REST_Response
     {
 
         $headers = $req->get_headers();
@@ -419,8 +420,7 @@ class Flair_Chat {
         $nonce = $headers['x_wp_nonce'][0];
 
 
-        if (!wp_verify_nonce($nonce, self::NONCE_ACTION))
-        {
+        if (!wp_verify_nonce($nonce, self::NONCE_ACTION)) {
             return new WP_REST_Response('Whaaat!', 422);
         }
 
@@ -431,7 +431,7 @@ class Flair_Chat {
         $table = $wpdb->prefix . "flair_chat_messages";
 
         $to_uid = get_current_user_id();
-        $user_ids = implode(',', [$to_uid, $from_uid] );
+        $user_ids = implode(',', [$to_uid, $from_uid]);
 
         $offset = $page * $limit;
 
@@ -441,7 +441,7 @@ class Flair_Chat {
                 WHERE to_uid IN ($user_ids)
                 AND from_uid IN ($user_ids) ");
 
-        $num_of_pages = ceil( $total / $limit );
+        $num_of_pages = ceil($total / $limit);
 
         $message_data = $wpdb->get_results("
                   SELECT
@@ -454,28 +454,29 @@ class Flair_Chat {
 
                 ORDER BY id DESC LIMIT $offset, $limit", OBJECT);
 
-	    $message_ids = ['5', '6', '7'];
-		$message_ids = implode(',', $message_ids);
+        $message_ids = ['5', '6', '7'];
+        $message_ids = implode(',', $message_ids);
 
-		$ids_to_update = [];
-		if (!empty($message_data)) {
-			foreach ($message_data as $message) {
-				$ids_to_update[] = $message->id;
-			}
+        $ids_to_update = [];
+        if (!empty($message_data)) {
+            foreach ($message_data as $message) {
+                $ids_to_update[] = $message->id;
+            }
 
-			$ids_to_update = implode(',', $ids_to_update);
+            $ids_to_update = implode(',', $ids_to_update);
 
-			$wpdb->query(
-				"
+            $wpdb->query(
+                "
 				    UPDATE $table
 				    SET is_read = true
-				    WHERE ID IN ($ids_to_update)");
-		}
+				    WHERE ID IN ($ids_to_update)"
+            );
+        }
 
 
         $data = [
             'messages' => $message_data,
-	        'user_ids' => $user_ids,
+            'user_ids' => $user_ids,
             'pages' => [
                 'current_page' => $page,
                 'total_pages' => $num_of_pages,
@@ -490,20 +491,17 @@ class Flair_Chat {
      * Runs on plugin uninstall
      * @return void
      */
-    public function flair_chat_cleanup()
-     {
+    public function flair_chat_cleanup(): void
+    {
          global $wpdb;
          $tables = array(
              $wpdb->prefix . "flair_chat_messages",
          );
-         foreach ( $tables as $table ) {
+         foreach ($tables as $table) {
              $sql = "DROP TABLE IF EXISTS $table";
              $wpdb->query($sql);
          }
-
-
-     }
-
+    }
 }
 
 new Flair_Chat();

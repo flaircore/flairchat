@@ -5,8 +5,7 @@ namespace Flair\Chat;
 use Pusher\Pusher;
 use Pusher\PusherException;
 
-class PusherClient
-{
+class PusherClient {
 
 	/**
 	 * Returns a pusher instance we can reuse.
@@ -16,17 +15,16 @@ class PusherClient
 	 * @return Pusher
 	 * @throws PusherException
 	 */
-	public function pusherInstance($details): Pusher {
-
+	public function pusherInstance( $details ): Pusher {
 		$cluster = $details['cluster'];
 		$app_id = $details['app_id'];
-		$secret =  $details['secret'];
-		$key =  $details['key'];
+		$secret = $details['secret'];
+		$key = $details['key'];
 
-		$options = [
+		$options = array(
 			'cluster' => $cluster,
 			//'useTLS' => false
-		];
+		);
 		return new Pusher(
 			$key,
 			$secret,

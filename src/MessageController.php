@@ -2,7 +2,6 @@
 
 namespace Flair\Chat;
 
-class MessageController
-{
+class MessageController {
 
 }

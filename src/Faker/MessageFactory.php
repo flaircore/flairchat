@@ -4,15 +4,15 @@
 namespace Flair\Chat\Faker;
 
 use \Faker\Factory;
-class MessageFactory
-{
+
+
+class MessageFactory {
     /**
      * @var Factory;
      */
     private $faker;
 
-    function __construct()
-    {
+    function __construct() {
         // use the factory to create a Faker\Generator instance
         $this->faker = Factory::create();
 
