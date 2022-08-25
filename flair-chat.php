@@ -2,11 +2,13 @@
 
 /**
  * Plugin Name:       Flair Chat
+ * Plugin URI:        flair-chat
  * Description:       Real time chat feature for wordpress.
  * Requires at least: 5.9
  * Requires PHP:      7.0
  * Version:           1.0.0
  * Author:            Nicholas Babu
+ * Author URI:        https://profiles.wordpress.org/bahson/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       flair-chat
@@ -97,12 +99,19 @@ class Flair_Chat {
 
     public function attach_chat_block()
     {
-        $js_src = plugin_dir_url(__FILE__) .'/dist/chat_nv.bundle.js';
+
+	    $current_uid = get_current_user_id();
+
+		// $TODO for guests
+		// Nothing for guest users for now.
+		if (!$current_uid) return;
+
+		$js_src = plugin_dir_url(__FILE__) .'/dist/chat_nv.bundle.js';
         $new_msg_url = get_rest_url(null, 'api/v1/flair-chat/send-message');
         $messages_url = get_rest_url(null, 'api/v1/flair-chat/messages/');
         $nonce = wp_create_nonce(self::NONCE_ACTION);
         $headers = ['X-WP-Nonce' => $nonce];
-        $current_uid = get_current_user_id();
+
 
         $styles_src = plugin_dir_url(__FILE__) .'/dist/chat_nv.css';
 
@@ -125,7 +134,7 @@ class Flair_Chat {
             'headers' => $headers,
         );
 
-        //dump(wp_json_encode( $flair_chat_items));
+
         wp_add_inline_script( 'flair-chat', 'var flairChatData = ' . wp_json_encode( $flair_chat_items), 'before' );
         wp_add_inline_style('flair-chat', $styles_src);
 
@@ -154,10 +163,15 @@ class Flair_Chat {
 
     public function chat_block_template($current_uid )
     {
-        $args = array( 'role__not_in' => 'adminisrator' );
+        $args = array(
+			// @TODO for roles from get_option() settings
+			//'role__not_in' => 'administrator',
+			'exclude'  => array('id' => $current_uid),
+	        );
         global $wpdb;
-
-        $user_query = new WP_User_Query($args);
+	    // Unread messages
+	    $table = $wpdb->prefix . "flair_chat_messages";
+	    $user_query = new WP_User_Query($args);
         $div_weight = 4;
         $total_unread = [
             'total' => 0
@@ -178,8 +192,7 @@ class Flair_Chat {
             }
         }
 
-        // Unread messages
-        $table = $wpdb->prefix . "flair_chat_messages";
+
         $user_ids = implode(',', $user_ids );
         $unread_messages = $wpdb->get_results("
                   SELECT
@@ -356,7 +369,7 @@ class Flair_Chat {
         ));
 
         register_rest_route( 'api/v1', 'flair-chat/send-message', array(
-            'methods' => ['POST', 'GET'],
+            'methods' => 'POST',
             'callback' => array($this, 'send_message')
         ));
     }
@@ -440,6 +453,24 @@ class Flair_Chat {
                    AND from_uid IN ($user_ids)
 
                 ORDER BY id DESC LIMIT $offset, $limit", OBJECT);
+
+	    $message_ids = ['5', '6', '7'];
+		$message_ids = implode(',', $message_ids);
+
+		$ids_to_update = [];
+		if (!empty($message_data)) {
+			foreach ($message_data as $message) {
+				$ids_to_update[] = $message->id;
+			}
+
+			$ids_to_update = implode(',', $ids_to_update);
+
+			$wpdb->query(
+				"
+				    UPDATE $table
+				    SET is_read = true
+				    WHERE ID IN ($ids_to_update)");
+		}
 
 
         $data = [

@@ -6,16 +6,23 @@ CONTENTS OF THIS FILE
 
 INTRODUCTION
 ------------
-This WordPress plugin provides a live chat block, and uses the pusher api
-https://pusher.com/channels/pricing
+This WordPress plugin provides a live chat block for logged in users only,
+and uses the pusher api https://pusher.com/channels/pricing, Your site will
+probably do alright with the free tier.
 
 INSTALLATION
 ------------
-Install like you would any other wordpress plugin, but 
-This plugin relies on https://packagist.org/packages/pusher/pusher-php-server and has not
-been packaged with this plugin yet, so be sure to run `composer install` from inside this
-plugin dir.
+* Install like you would any other wordpress plugin.
+* Click on FlairChat Config admin menu and enter your pusher channel details as
+provided @ https://dashboard.pusher.com/apps/
 
+<strike>
+```
+    This plugin relies on https://packagist.org/packages/pusher/pusher-php-server and has not
+    been packaged with this plugin yet, so be sure to run `composer install` from inside this
+    plugin dir.
+```
+</strike>
 ### Mini view:
 
 ![Mini View](/minimized_view.png)

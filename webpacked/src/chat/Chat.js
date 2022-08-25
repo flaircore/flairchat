@@ -337,7 +337,7 @@ class Chat {
       // Which has multiple variants to consider for
       // each work-flow.
       // @TODO play sound for receiver below too
-    else if (this.currentId === to) {
+    else if (this.currentId === parseInt(to)) {
       // Check if 'from' has a class of active.
       // Update view chat if so
       // Else update unread count
@@ -378,7 +378,6 @@ class Chat {
   messageTemplateFromData = data => {
     // Create a message div from data
     const messageDiv = document.createElement('div')
-    console.log(data.from, this.currentId, data.to)
     if (parseInt(data.from) === parseInt(this.currentId)) {
       messageDiv.classList.add('message','sent')
     } else {
@@ -425,9 +424,10 @@ class Chat {
       redirect: 'follow',
       })
 
+
     if (res.status === 200) {
-      const dd = await res.json();
-      return dd
+
+      return await res.json();
 
     } else  {
       console.error('An error occurred!')
