@@ -1,3 +1,12 @@
+# FlairChat
+
+**Contributors:** [Nicholas Babu](https://profiles.wordpress.org/bahson/)
+**Requires at least:** 5.8
+**Stable tag:** trunk (master)  
+**License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
+**Requires PHP:** 5.6  
+
+
 CONTENTS OF THIS FILE
 ---------------------
 
