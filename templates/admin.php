@@ -12,7 +12,7 @@ function add_flair_chat_settings_page(): void
         'FlairChat Config',
         'manage_options',
         'flair-chat-settings-page',
-        'admin_index',
+        'flair_chat_admin_index',
         'dashicons-admin-generic',
         110
     );
@@ -132,7 +132,7 @@ function flair_chat_settings_app_id_input_callback(): void
     $options = get_option('flair_chat_setting_app_id_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_app_id_input" class="regular-text" value="<?php echo $options ?? '' ?>">
+        <input type="text" name="flair_chat_setting_app_id_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
@@ -142,7 +142,7 @@ function flair_chat_settings_cluster_input_callback(): void
     $options = get_option('flair_chat_setting_cluster_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_cluster_input" class="regular-text" value="<?php echo $options ?? '' ?>">
+        <input type="text" name="flair_chat_setting_cluster_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
@@ -152,7 +152,7 @@ function flair_chat_settings_secret_input_callback(): void
     $options = get_option('flair_chat_setting_secret_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_secret_input" class="regular-text" value="<?php echo $options ?? '' ?>">
+        <input type="text" name="flair_chat_setting_secret_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
@@ -162,7 +162,7 @@ function flair_chat_settings_key_input_callback(): void
     $options = get_option('flair_chat_setting_key_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_key_input" class="regular-text" value="<?php echo $options ?? '' ?>">
+        <input type="text" name="flair_chat_setting_key_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
@@ -171,19 +171,24 @@ function flair_chat_settings_key_input_callback(): void
 function flair_chat_settings_roles_select_callback(): string
 {
     $options = get_option('flair_chat_setting_roles_select');
+    // @TODO implement multiselect.
     return ''
     ?>
-    <select multiple='multiple' name="flair_chat_setting_roles_select" class="regular-text">
-        <option value="">Select Roles to exclude</option>
-        <option value="Admin" <?php selected('Admin', $options); ?>> Admin </option>
-        <option value="Editor" <?php selected('Editor', $options); ?>> Editor </option>
-    </select>
+    <?php
+	/**
+	<select multiple='multiple' name="flair_chat_setting_roles_select" class="regular-text">
+	<option value="">Select Roles to exclude</option>
+	<option value="Admin" <?php selected('Admin', $options); ?>> Admin </option>
+	<option value="Editor" <?php selected('Editor', $options); ?>> Editor </option>
+	</select>
+	 */
+    ?>
 
     <?php
 }
 
 
-function admin_index(): void
+function flair_chat_admin_index(): void
 {
     ?>
     <div class="wrap">
