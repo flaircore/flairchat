@@ -27,6 +27,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Flair\Chat\AppVars;
 use Flair\Chat\PusherClient;
+use Pusher\Pusher;
+
 if (!class_exists('Flair_Chat')) {
 	class Flair_Chat {
 
@@ -34,9 +36,9 @@ if (!class_exists('Flair_Chat')) {
 
 		private string $plugin;
 
-		protected \Pusher\Pusher $pusher;
+		protected Pusher $pusher;
 
-		protected $pusher_details;
+		protected array $pusher_details;
 
 		public function __construct() {
 

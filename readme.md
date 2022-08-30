@@ -1,12 +1,13 @@
 # Flair Chat
-Contributors: bahson
-Tags: chat, realtime chat, live chat
-Requires at least: 5.7
-Tested up to: 6.0
-Stable tag: 1.0.0
-Requires PHP: 7.0
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+- Contributors: bahson
+- Donate link: https://flaircore.com/flair-core/paypal_payment
+- Tags: chat, realtime chat, live chat
+- Requires at least: 5.7
+- Tested up to: 6.0
+- Stable tag: 1.0.0
+- Requires PHP: 7.0
+- License: GPLv2 or later
+- License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Flair Chat provides a real time chat feature for your logged in users. Allows them to send and receive messages.
 

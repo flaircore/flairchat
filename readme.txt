@@ -1,5 +1,6 @@
 === Flair Chat ===
 Contributors: bahson
+Donate link: https://flaircore.com/flair-core/paypal_payment
 Tags: chat, realtime chat, live chat
 Requires at least: 5.7
 Tested up to: 6.0
