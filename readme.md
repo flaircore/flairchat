@@ -46,3 +46,6 @@ probably do alright with the free tier.
 
 = 1.0.0 =
 First version
+
+= 1.0.1 =
+Fixed invalid date, error on to_uid just sent message.
