@@ -1,0 +1,29 @@
+// @use "icons";
+@import "icons";
+/**
+ * Defines the layout of chat controls.
+ *
+ */
+#chat-block-main {
+  .chat-block.no-show {
+    display: none;
+  }
+  .chat-block,
+  .chat-controls {
+    .no-show {
+      display: none;
+    }
+  }
+
+  .chat-controls {
+    //background: #c5a7e8;
+  }
+
+  section {
+    //background: red;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+}

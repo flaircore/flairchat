@@ -1,0 +1,61 @@
+$fa-font-path: '../../node_modules/@fortawesome/fontawesome-free/webfonts';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
+@import '../../node_modules/@fortawesome/fontawesome-free/scss/solid';
+// @import '../../node_modules/@fortawesome/fontawesome-free/scss/regular';
+
+/**
+ * Defines font awesome icons to associate,
+ * with each icon div class.
+ */
+#chat-block-main {
+
+  // General for all icons
+  .icon::before {
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font: var(--fa-font-solid);
+    padding: 0.5em;
+  }
+
+  .chat-controls {
+    // unread
+    .info::before {
+      //content: "\f007";
+      content: "\f0e0";
+      //color: red;
+    }
+
+    .maximize,
+    .minimize,
+    .go-back {
+      cursor: pointer;
+    }
+
+    .maximize::before {
+      content: "\f31e";
+    }
+
+    .minimize::before {
+      content: "\f78c";
+    }
+
+    .go-back::before {
+      content: "\f100";
+    }
+
+  }
+
+  .pending::before {
+    content: "\f27a";
+  }
+
+  //.read::before {
+  //  content: "\f560";
+  //}
+  //
+  //.unread::before {
+  //  content: "\f00c";
+  //}
+
+}
