@@ -22,13 +22,15 @@ class AppVars
         $cluster = get_option('flair_chat_setting_cluster_input');
         $secret = get_option('flair_chat_setting_secret_input');
         $key = get_option('flair_chat_setting_key_input');
-        $roles= get_option('flair_chat_setting_roles_select');
+        $roles = get_option('flair_chat_setting_roles_select');
+        $notification_option = get_option('flair_chat_setting_notification_option');
         $this->pusher_details = array(
             'app_id' => $app_id,
             'cluster' => $cluster,
             'secret' => $secret,
             'key' => $key,
             'roles' => $roles,
+            'notification_option' => $notification_option,
         );
     }
 
