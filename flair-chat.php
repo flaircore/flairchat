@@ -6,7 +6,7 @@
  * Plugin Name:       Flair Chat
  * Plugin URI:        https://wordpress.org/plugins/flair-chat/
  * Description:       Real time chat feature for wordpress.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Nicholas Babu
  * Author URI:        https://profiles.wordpress.org/bahson/
  * License:           GPL-2.0-or-later
@@ -135,8 +135,8 @@ if (!class_exists('Flair_Chat')) {
 				'new_msg_url'  => $new_msg_url,
 				'current_id'   => $current_uid,
 				'headers'      => $headers,
+				'notification_option'      => $this->pusher_details['notification_option']
 			);
-
 
 			wp_add_inline_script( 'flair-chat', 'var flairChatData = ' . wp_json_encode( $flair_chat_items ), 'before' );
 			wp_add_inline_style( 'flair-chat', $styles_src );
@@ -179,7 +179,7 @@ if (!class_exists('Flair_Chat')) {
 				'total' => 0
 			];
 
-			$missing_image_uri = plugin_dir_url( __FILE__ ) . '/images/missing_image.svg';
+			$missing_image_uri = plugin_dir_url( __FILE__ ) . '/media/missing_image.svg';
 			$users_list        = "";
 
 			//$faker = new \Flair\Chat\Faker\MessageFactory();
@@ -330,7 +330,18 @@ if (!class_exists('Flair_Chat')) {
                 </div>
             </div>";
 
+			//$notification_file = plugin_dir_url( __FILE__ ) . 'media/inquisitiveness-481';
+			$notification_file = plugin_dir_url( __FILE__ ) . 'media/your-turn-491';
+			$filename = $notification_file;
+			$mp3Source = "<source src='$filename.mp3' type=audio/mpeg>";
+			$oggSource = "<source src=' $filename.ogg' type='audio/ogg'>";
+			$embedSource = "<embed hidden='false' autostart='false' loop='false' src=' $filename.mp3'>";
 			$content = "<section id='chat-block-main' class='children-hidden' style='z-index: $div_weight'>
+						<div hidden id='notification'>
+							<div id='sound'>
+								<audio>$mp3Source$oggSource$embedSource</audio>						
+							</div>
+						</div>
                         $chat_controls
                         $chat_block
                     ";

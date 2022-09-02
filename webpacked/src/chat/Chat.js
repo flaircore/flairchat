@@ -1,7 +1,7 @@
 import Pusher from 'pusher-js'
 
 class Chat {
-  constructor(messages_url, new_message_url, pusher_configs, current_id, headers = {}) {
+  constructor(messages_url, new_message_url, pusher_configs, current_id, headers = {}, appConfigs = {}) {
     const chatBlockView = document.querySelector("#chat-block-main")
       //const chatMainView = document.querySelector("#chat-block-main .chat-block")
     const maximizeBtn = document.querySelector("#chat-block-main .maximize")
@@ -14,6 +14,7 @@ class Chat {
     const usersView = chatBlockView.querySelector('.users-wrapper')
     const messagesView = chatBlockView.querySelector('.messages-view')
     const chatInput = chatBlockView.querySelector('[type="input"], [name="message"]')
+    const totalUnread = chatBlockView.querySelector( '.chat-controls .total')
 
     chatInput
       .addEventListener('keyup', async (e) => await this.sendNewMessage(e))
@@ -26,6 +27,7 @@ class Chat {
       })
     })
     this.controls = controls
+    this.totalUnread = totalUnread
     this.chatBlockView  = chatBlockView
     this.usersView  = usersView
     this.messagesView  = messagesView
@@ -37,6 +39,8 @@ class Chat {
     this.receiverId = ''
     this.currentId = current_id
     this.headers = headers
+    this.notificationFile = appConfigs.notification_file
+    this.notificationOption = appConfigs.notification_option
     // Holds the messages pages (pager) item
     this.pages = {
       current_page: null,
@@ -255,6 +259,7 @@ class Chat {
       }
       newMessages.appendChild(messageDiv)
     })
+    if (messages[0]) this.updateTotalUnRead(messages[0], 'is_read')
     return newMessages
   }
 
@@ -284,6 +289,8 @@ class Chat {
 
 
     if (event.keyCode === 13 && this.receiverId && event.target.value) {
+
+      // @TODO show error when value is empty
 
       const headers = {'Content-Type': 'application/x-www-form-urlencoded', ...this.headers}
 
@@ -320,8 +327,49 @@ class Chat {
       // Clear value
       event.target.value = ''
     }
+  }
 
-    //alert(e.target.value)
+  updateTotalUnRead = (data, type = null) => {
+    const receiver = this.usersView.querySelector(`[id="${data.to}"]`)
+
+    const unreadCount = receiver?.querySelector('.pending .unread-count')
+
+    if (!type) {
+
+      if (unreadCount?.innerText) {
+        unreadCount.innerText = parseInt(unreadCount.innerText) + 1
+      } else {
+        const item = document.createElement('span')
+        item.classList.add('unread-count')
+        item.innerText = 1
+        receiver.querySelector('.pending')
+            .appendChild(item)
+      }
+
+      if (this.notificationOption) {
+        const notifications = this.chatBlockView.querySelector("#notification #sound audio")
+        notifications.play()
+            .then(data => {
+            })
+            .catch(error => console.error('User must first interact with the chat block!'))
+      }
+
+
+      this.totalUnread.innerText = parseInt(this.totalUnread.innerText) + 1
+
+    } else {
+      // Bug when viewing other users messages, we need to pass from!! @TODO
+      // @TODO bug on user update total unread accuracy!
+      // Update total Unread
+      const total = parseInt(this.totalUnread.innerText);
+      // const receiver = this.usersView.querySelector(`[id="${from}"]`)
+      //       if (receiver.classList.contains('active')) {
+      const fromTotalItem = this.usersView.querySelector('.active .pending .unread-count')
+      const fromTotal = parseInt(fromTotalItem.innerText)
+
+      this.totalUnread.innerText = total <= 10 ? 0 : total - 10
+      fromTotalItem.innerText = fromTotal <= 10 ? 0 : fromTotal - 10
+    }
   }
 
   druChatEvent = ({from, to}) => {
@@ -336,8 +384,9 @@ class Chat {
       // The receiver of the message now.
       // Which has multiple variants to consider for
       // each work-flow.
-      // @TODO play sound for receiver below too
+      // Play sound for receiver below too.
     else if (this.currentId === parseInt(to)) {
+
       // Check if 'from' has a class of active.
       // Update view chat if so
       // Else update unread count
@@ -356,16 +405,8 @@ class Chat {
 
       } else {
         // Update unread count.
-        const unreadCount = receiver.querySelector('.pending .unread-count')
-        if (unreadCount?.innerText) {
-          unreadCount.innerText = parseInt(unreadCount.innerText) + 1
-        } else {
-          const item = document.createElement('span')
-          item.classList.add('unread-count')
-          item.innerText = 1
-          receiver.querySelector('.pending')
-            .appendChild(item)
-        }
+        // Updates unread and plays sound
+        this.updateTotalUnRead({to: from})
       }
     }
   }

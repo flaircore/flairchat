@@ -4,7 +4,7 @@ Donate link: https://flaircore.com/flair-core/paypal_payment
 Tags: chat, realtime chat, live chat
 Requires at least: 5.7
 Tested up to: 6.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -51,3 +51,9 @@ First version
 
 = 1.0.1 =
 Fixed invalid date, error on to_uid just sent message.
+
+= 1.0.2 =
+Updates total unread in the chat controls on new message.
+Updates total unread when user opens message view and also on scrolls.
+Plays notification sound when new message received.
+Enables Admins to disable or enable new message sound notifications via the configuration form.

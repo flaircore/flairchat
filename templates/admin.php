@@ -74,6 +74,12 @@ function flair_chat_settings_init(): void
         )
     );
 
+	// Notification options
+	register_setting(
+		'flair-chat-settings-page',
+		'flair_chat_setting_notification_option',
+	);
+
     // Exclude roles
     register_setting(
         'flair-chat-settings-page',
@@ -118,6 +124,14 @@ function flair_chat_settings_init(): void
         'flair_chat_settings_section'
     );
 
+	add_settings_field(
+        'flair_chat_setting_notification_option',
+        __('Sound Notification ON', 'flair-chat'),
+        'flair_chat_settings_notification_option_callback',
+        'flair-chat-settings-page',
+        'flair_chat_settings_section'
+    );
+
     add_settings_field(
         'flair_chat_setting_roles_select',
         __('Roles to Exclude from Chat', 'flair-chat'),
@@ -132,27 +146,18 @@ function flair_chat_settings_app_id_input_callback(): void
     $options = get_option('flair_chat_setting_app_id_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_app_id_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
+        <input required type="text" name="flair_chat_setting_app_id_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
 }
-function flair_chat_settings_cluster_input_callback(): void
-{
-    $options = get_option('flair_chat_setting_cluster_input');
-    ?>
-    <label>
-        <input type="text" name="flair_chat_setting_cluster_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
-    </label>
 
-    <?php
-}
 function flair_chat_settings_secret_input_callback(): void
 {
     $options = get_option('flair_chat_setting_secret_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_secret_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
+        <input required type="text" name="flair_chat_setting_secret_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
@@ -162,7 +167,38 @@ function flair_chat_settings_key_input_callback(): void
     $options = get_option('flair_chat_setting_key_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_key_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
+        <input required type="text" name="flair_chat_setting_key_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
+    </label>
+
+    <?php
+}
+
+function flair_chat_settings_cluster_input_callback(): void
+{
+	$options = get_option('flair_chat_setting_cluster_input');
+	?>
+    <label>
+        <input required type="text" name="flair_chat_setting_cluster_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
+    </label>
+
+	<?php
+}
+
+function flair_chat_settings_notification_option_callback(): void
+{
+    $options = get_option('flair_chat_setting_notification_option');
+	$cluster = get_option('flair_chat_setting_cluster_input');
+    // Cluster is required, if not set initially, we check notifications too
+    if (!$options && !$cluster) $options = true
+
+    ?>
+    <label>
+        <input
+                type="checkbox"
+                name="flair_chat_setting_notification_option"
+                id="flair_chat_setting_notification_option"
+                value="1"  <?= checked( $options, 1, false );?>
+        />
     </label>
 
     <?php
