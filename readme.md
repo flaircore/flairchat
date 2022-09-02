@@ -4,7 +4,7 @@
 - Tags: chat, realtime chat, live chat
 - Requires at least: 5.7
 - Tested up to: 6.0
-- Stable tag: 1.0.3
+- Stable tag: 1.0.4
 - Requires PHP: 7.0
 - License: GPLv2 or later
 - License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -59,3 +59,7 @@ Enables Admins to disable or enable new message sound notifications via the conf
 = 1.0.3 =
 
 Included /vendor directory which was missing from previous git actions.
+
+= 1.0.4 =
+
+Downloaded the vendor items to be included in the 1.0.3 fix above.
