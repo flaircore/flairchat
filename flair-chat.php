@@ -6,7 +6,7 @@
  * Plugin Name:       Flair Chat
  * Plugin URI:        https://wordpress.org/plugins/flair-chat/
  * Description:       Real time chat feature for wordpress.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            Nicholas Babu
  * Author URI:        https://profiles.wordpress.org/bahson/
  * License:           GPL-2.0-or-later

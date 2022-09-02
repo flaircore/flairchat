@@ -4,7 +4,7 @@
 - Tags: chat, realtime chat, live chat
 - Requires at least: 5.7
 - Tested up to: 6.0
-- Stable tag: 1.0.2
+- Stable tag: 1.0.3
 - Requires PHP: 7.0
 - License: GPLv2 or later
 - License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -55,3 +55,7 @@ Updates total unread in the chat controls on new message.
 Updates total unread when user opens message view and also on scrolls.
 Plays notification sound when new message received.
 Enables Admins to disable or enable new message sound notifications via the configuration form.
+
+= 1.0.3 =
+
+Included /vendor directory which was missing from previous git actions.
