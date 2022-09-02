@@ -146,7 +146,7 @@ function flair_chat_settings_app_id_input_callback(): void
     $options = get_option('flair_chat_setting_app_id_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_app_id_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
+        <input required type="text" name="flair_chat_setting_app_id_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
@@ -157,7 +157,7 @@ function flair_chat_settings_secret_input_callback(): void
     $options = get_option('flair_chat_setting_secret_input');
     ?>
     <label>
-        <input type="text" name="flair_chat_setting_secret_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
+        <input required type="text" name="flair_chat_setting_secret_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
@@ -167,7 +167,7 @@ function flair_chat_settings_key_input_callback(): void
     $options = get_option('flair_chat_setting_key_input');
     ?>
     <label>
-        <input required="required" type="text" name="flair_chat_setting_key_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
+        <input required type="text" name="flair_chat_setting_key_input" class="regular-text" value="<?php esc_html_e( $options, 'flair-chat' ) ?>">
     </label>
 
     <?php
@@ -193,7 +193,12 @@ function flair_chat_settings_notification_option_callback(): void
 
     ?>
     <label>
-        <input type="checkbox" name="flair_chat_setting_notification_option" id="flair_chat_setting_notification_option" value="1"  <?= checked( $options, 1, false );?> />
+        <input
+                type="checkbox"
+                name="flair_chat_setting_notification_option"
+                id="flair_chat_setting_notification_option"
+                value="1"  <?= checked( $options, 1, false );?>
+        />
     </label>
 
     <?php

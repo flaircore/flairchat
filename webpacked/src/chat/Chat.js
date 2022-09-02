@@ -367,8 +367,8 @@ class Chat {
       const fromTotalItem = this.usersView.querySelector('.active .pending .unread-count')
       const fromTotal = parseInt(fromTotalItem.innerText)
 
-      this.totalUnread.innerText = total <= 30 ? 0 : total - 30
-      fromTotalItem.innerText = fromTotal <= 30 ? 0 : fromTotal - 30
+      this.totalUnread.innerText = total <= 10 ? 0 : total - 10
+      fromTotalItem.innerText = fromTotal <= 10 ? 0 : fromTotal - 10
     }
   }
 
