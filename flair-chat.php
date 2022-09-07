@@ -194,21 +194,24 @@ if (!class_exists('Flair_Chat')) {
 				}
 			}
 
-			$user_ids_placeholder = $this->array_items_query_placeholders($user_ids, '%d');
-			$where_array = array();
-			$where_array[] = $wpdb->prepare( "to_uid = %d", $current_uid );
-			$where_array[] = $wpdb->prepare( "from_uid IN ($user_ids_placeholder)", $user_ids );
-			$sql = "SELECT
+			$unread_messages = null;
+			if ( isset( $user_ids[0] ) ) {
+				$user_ids_placeholder = $this->array_items_query_placeholders($user_ids, '%d');
+				$where_array = array();
+				$where_array[] = $wpdb->prepare( "to_uid = %d", $current_uid );
+				$where_array[] = $wpdb->prepare( "from_uid IN ($user_ids_placeholder)", $user_ids );
+				$sql = "SELECT
     					message, from_uid, to_uid, is_read,
                   		COUNT(message)
 					FROM {$table}
 					WHERE 
 				    	is_read = false AND";
 
-			$sql .= ' ' . join( ' AND ', $where_array);
-			$sql .= ' GROUP BY from_uid';
+				$sql .= ' ' . join( ' AND ', $where_array);
+				$sql .= ' GROUP BY from_uid';
 
-			$unread_messages = $wpdb->get_results( $sql );
+				$unread_messages = $wpdb->get_results( $sql );
+			}
 
 			if ( $unread_messages ) {
 				foreach ( $unread_messages as $unread_message ) {

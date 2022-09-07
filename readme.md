@@ -4,7 +4,7 @@
 - Tags: chat, realtime chat, live chat
 - Requires at least: 5.7
 - Tested up to: 6.0
-- Stable tag: 1.0.4
+- Stable tag: 1.0.5
 - Requires PHP: 7.0
 - License: GPLv2 or later
 - License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -29,7 +29,8 @@ probably do alright with the free tier.
 3. From your wordpress plugins listing page, below the FlairChat plugin is the configuration link, click on that and fill in
    the form with the right information from step 2 above ie; app_id, key, secret and cluster.
 
-== Frequently Asked Questions ==
+### SECTIONS
+* [Frequently Asked Questions](https://wordpress.org/plugins/flair-chat/#faq)
 
 == Screenshots ==
 
@@ -63,3 +64,8 @@ Included /vendor directory which was missing from previous git actions.
 = 1.0.4 =
 
 Downloaded the vendor items to be included in the 1.0.3 fix above.
+
+
+= 1.0.5 =
+
+Fixed count unread issue, when no users were found.
