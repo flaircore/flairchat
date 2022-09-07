@@ -6,7 +6,7 @@
  * Plugin Name:       Flair Chat
  * Plugin URI:        https://wordpress.org/plugins/flair-chat/
  * Description:       Real time chat feature for wordpress.
- * Version:           1.0.4
+ * Version:           1.0.6
  * Author:            Nicholas Babu
  * Author URI:        https://profiles.wordpress.org/bahson/
  * License:           GPL-2.0-or-later
@@ -225,6 +225,7 @@ if (!class_exists('Flair_Chat')) {
 				}
 			}
 
+			$users = apply_filters('flair_chat_load_users', $users);
 
 			// Template
 			if ( ! empty( $users ) ) {
@@ -406,12 +407,12 @@ if (!class_exists('Flair_Chat')) {
 				'from_uid' => $from_uid,
 				'to_uid'   => $params['receiver_id'],
 				'is_read'  => false,
-				//'created_at' => current_time( 'timestamp')
+				'should_send' => true,
 			);
 
 			$table = $wpdb->prefix . "flair_chat_messages";
 
-			$new_message = $wpdb->insert( $table, $message_data );
+			$message_data = apply_filters('flair_chat_sent_message', $message_data);
 
 			$data = [
 				'from' => $from_uid,
@@ -419,8 +420,12 @@ if (!class_exists('Flair_Chat')) {
 
 			];
 
+			if ($message_data['should_send']) {
+				unset($message_data['should_send']);
+				$new_message = $wpdb->insert( $table, $message_data );
+				$this->pusher->trigger( 'my-channel', 'dru-chat-event', $data );
 
-			$this->pusher->trigger( 'my-channel', 'dru-chat-event', $data );
+			}
 
 			return new WP_REST_Response( $data );
 		}

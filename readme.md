@@ -1,17 +1,17 @@
-# Flair Chat
+# ![Flair Chat](/assets/icon-128x128.gif)
 - Contributors: bahson
 - Donate link: https://flaircore.com/flair-core/paypal_payment
 - Tags: chat, realtime chat, live chat
 - Requires at least: 5.7
 - Tested up to: 6.0
-- Stable tag: 1.0.5
+- Stable tag: 1.0.6
 - Requires PHP: 7.0
 - License: GPLv2 or later
 - License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Flair Chat provides a real time chat feature for your logged in users. Allows them to send and receive messages.
 
-### Description
+### ![Description](/assets/banner-772x250.gif)
 
 This WordPress plugin provides a live chat block for logged in users only,
 and uses the pusher api [pusher.com/channels/pricing](https://pusher.com/channels/pricing), Your site will
@@ -69,3 +69,11 @@ Downloaded the vendor items to be included in the 1.0.3 fix above.
 = 1.0.5 =
 
 Fixed count unread issue, when no users were found.
+
+= 1.0.6 =
+
+Added custom filter hooks, so developers can easily extend/build on this plugin.
+These are;
+* flair_chat_load_users:
+* flair_chat_sent_message:
+  See docs.md for more details
