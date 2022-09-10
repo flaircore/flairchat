@@ -6,7 +6,7 @@
  * Plugin Name:       Flair Chat
  * Plugin URI:        https://wordpress.org/plugins/flair-chat/
  * Description:       Real time chat feature for wordpress.
- * Version:           1.0.2
+ * Version:           1.0.6
  * Author:            Nicholas Babu
  * Author URI:        https://profiles.wordpress.org/bahson/
  * License:           GPL-2.0-or-later
@@ -194,21 +194,24 @@ if (!class_exists('Flair_Chat')) {
 				}
 			}
 
-			$user_ids_placeholder = $this->array_items_query_placeholders($user_ids, '%d');
-			$where_array = array();
-			$where_array[] = $wpdb->prepare( "to_uid = %d", $current_uid );
-			$where_array[] = $wpdb->prepare( "from_uid IN ($user_ids_placeholder)", $user_ids );
-			$sql = "SELECT
+			$unread_messages = null;
+			if ( isset( $user_ids[0] ) ) {
+				$user_ids_placeholder = $this->array_items_query_placeholders($user_ids, '%d');
+				$where_array = array();
+				$where_array[] = $wpdb->prepare( "to_uid = %d", $current_uid );
+				$where_array[] = $wpdb->prepare( "from_uid IN ($user_ids_placeholder)", $user_ids );
+				$sql = "SELECT
     					message, from_uid, to_uid, is_read,
                   		COUNT(message)
 					FROM {$table}
 					WHERE 
 				    	is_read = false AND";
 
-			$sql .= ' ' . join( ' AND ', $where_array);
-			$sql .= ' GROUP BY from_uid';
+				$sql .= ' ' . join( ' AND ', $where_array);
+				$sql .= ' GROUP BY from_uid';
 
-			$unread_messages = $wpdb->get_results( $sql );
+				$unread_messages = $wpdb->get_results( $sql );
+			}
 
 			if ( $unread_messages ) {
 				foreach ( $unread_messages as $unread_message ) {
@@ -222,6 +225,7 @@ if (!class_exists('Flair_Chat')) {
 				}
 			}
 
+			$users = apply_filters('flair_chat_load_users', $users);
 
 			// Template
 			if ( ! empty( $users ) ) {
@@ -403,12 +407,12 @@ if (!class_exists('Flair_Chat')) {
 				'from_uid' => $from_uid,
 				'to_uid'   => $params['receiver_id'],
 				'is_read'  => false,
-				//'created_at' => current_time( 'timestamp')
+				'should_send' => true,
 			);
 
 			$table = $wpdb->prefix . "flair_chat_messages";
 
-			$new_message = $wpdb->insert( $table, $message_data );
+			$message_data = apply_filters('flair_chat_sent_message', $message_data);
 
 			$data = [
 				'from' => $from_uid,
@@ -416,8 +420,12 @@ if (!class_exists('Flair_Chat')) {
 
 			];
 
+			if ($message_data['should_send']) {
+				unset($message_data['should_send']);
+				$new_message = $wpdb->insert( $table, $message_data );
+				$this->pusher->trigger( 'my-channel', 'dru-chat-event', $data );
 
-			$this->pusher->trigger( 'my-channel', 'dru-chat-event', $data );
+			}
 
 			return new WP_REST_Response( $data );
 		}
